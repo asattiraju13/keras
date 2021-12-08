@@ -14,17 +14,20 @@
 # ==============================================================================
 """Utility functions shared between SavedModel saving/loading implementations."""
 
-import tensorflow.compat.v2 as tf
 
+import inspect as _inspect
 import itertools
 import threading
 import types
+
 from keras import backend
 from keras.engine import base_layer_utils
 from keras.utils import control_flow_util
 from keras.utils import tf_contextlib
 from keras.utils import tf_inspect
 from keras.utils.generic_utils import LazyLoader
+
+import tensorflow.compat.v2 as tf
 
 
 # pylint:disable=g-inconsistent-quotes
@@ -217,7 +220,7 @@ def get_training_arg_index(call_fn):
   else:
     # Try to find 'training' in the list of args or kwargs.
     arg_list = argspec.args
-    if tf_inspect.ismethod(call_fn):
+    if tf_inspect.ismethod(call_fn) or _inspect.ismethod(call_fn):
       arg_list = arg_list[1:]
 
     if 'training' in arg_list:
